@@ -1,0 +1,11 @@
+CREATE TABLE usuarios (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  nombre VARCHAR(30) NOT NULL,
+  apellido VARCHAR(30) NOT NULL,
+  dni VARCHAR(10) NOT NULL UNIQUE,
+  email VARCHAR(255) NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  rol ENUM('admin', 'cliente') NOT NULL DEFAULT 'cliente',
+  foto VARCHAR(255) NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
