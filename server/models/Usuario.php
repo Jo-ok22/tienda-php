@@ -22,7 +22,24 @@ class Usuario {
         $stmt = $this->conn->prepare($query);
         $hashed = password_hash($this->password, PASSWORD_DEFAULT);
         $stmt->bind_param("sssssss", $this->nombre, $this->apellido, $this->dni, $this->email, $hashed, $this->rol, $this->foto);
-        return $stmt->execute();
+
+        if ($stmt->execute()) {
+            return [
+                "success" => true,
+                "id" => $this->conn->insert_id,
+                "nombre" => $this->nombre,
+                "apellido" => $this->apellido,
+                "dni" => $this->dni,
+                "email" => $this->email,
+                "rol" => $this->rol,
+                "foto" => $this->foto
+            ];
+        } else {
+            return [
+                "success" => false,
+                "error" => $stmt->error
+            ];
+        }
     }
 
     public function login() {
@@ -31,9 +48,10 @@ class Usuario {
         $stmt->bind_param("s", $this->email);
         $stmt->execute();
         $result = $stmt->get_result();
+        
         if ($row = $result->fetch_assoc()) {
             if (password_verify($this->password, $row['password'])) {
-                unset($row['password']);
+                unset($row['password']); // no devolver el hash
                 return $row;
             }
         }

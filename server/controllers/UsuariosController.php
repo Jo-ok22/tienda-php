@@ -1,6 +1,6 @@
 <?php
-include_once "../config/database.php";
-include_once "../models/Usuario.php";
+include_once __DIR__ . '/../config/database.php';
+include_once __DIR__ . '/../models/Usuario.php';
 
 header("Content-Type: application/json");
 
@@ -13,19 +13,35 @@ $action = $_GET['action'] ?? '';
 
 switch ($action) {
     case 'register':
-        foreach ($data as $key => $value) { $model->$key = $value; }
+        foreach ($data as $key => $value) { 
+            $model->$key = $value; 
+        }
         echo json_encode($model->registrar());
         break;
+
     case 'login':
-        $model->email = $data['email'];
-        $model->password = $data['password'];
+        $model->email = $data['email'] ?? '';
+        $model->password = $data['password'] ?? '';
         $user = $model->login();
         if ($user) {
-            echo json_encode($user);
+            echo json_encode([
+                "success" => true,
+                "user" => $user
+            ]);
         } else {
             http_response_code(401);
-            echo json_encode(["message" => "Credenciales inválidas"]);
+            echo json_encode([
+                "success" => false,
+                "message" => "Credenciales inválidas"
+            ]);
         }
+        break;
+
+    default:
+        echo json_encode([
+            "success" => false,
+            "message" => "Acción no válida"
+        ]);
         break;
 }
 ?>
