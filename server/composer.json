@@ -1,0 +1,16 @@
+{
+    "name": "mi-tienda/app",
+    "description": "Proyecto de tienda online en PHP",
+    "type": "project",
+    "license": "proprietary",
+    "authors": [
+        {
+            "name": "Luna Josias, Herrera Emanuel, Alvarez Yuliana"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "phpmailer/phpmailer": "^6.10",
+        "setasign/fpdf": "^1.8"
+    }
+}

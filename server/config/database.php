@@ -1,4 +1,5 @@
 <?php
+// conection = mysql -u root -h localhost -p
 class Database {
     private $host = "localhost";
     private $username = "root";

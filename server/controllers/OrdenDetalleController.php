@@ -1,6 +1,6 @@
 <?php
-include_once "../config/database.php";
-include_once "../models/OrdenDetalle.php";
+include_once __DIR__ . "/../config/database.php";
+include_once __DIR__ . "/../models/OrdenDetalle.php";
 
 header("Content-Type: application/json");
 
