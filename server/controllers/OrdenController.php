@@ -59,17 +59,5 @@ switch ($action) {
         break;
 }
 
-
-
-
-
-// case 'pay':
-//     if (($data['codigo_pago'] ?? '') === '123456789') {
-//         $model->id = $data['orden_id'] ?? null;
-//         echo json_encode($model->pagar());
-//     } else {
-//         echo json_encode(false);
-//     }
-//     break;
 ?>
 
