@@ -17,10 +17,23 @@ switch ($action) {
             $model->$key = $value; 
         }
 
+        $uploadDir = __DIR__ . '/../utils/user_foto/';
+        if (!is_dir($uploadDir)) {
+            mkdir($uploadDir, 0777, true);
+        }
+
         if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-            $uploadDir = __DIR__ . '/../utils/user_foto/';
-            if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
-            $fileName = time() . '_' . basename($_FILES['foto']['name']);
+            // Detectar MIME real
+            $mime = mime_content_type($_FILES['foto']['tmp_name']);
+            // Forzar extensión .jpg para JPEG/JFIF
+            if (in_array($mime, ['image/jpeg', 'image/jpg', 'image/pjpeg', 'image/jfif'])) {
+                $ext = 'jpg';
+            } else {
+                $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+                $ext = strtolower($ext);
+            }
+
+            $fileName = time() . '_' . bin2hex(random_bytes(5)) . '.' . $ext;
             $targetPath = $uploadDir . $fileName;
 
             if (move_uploaded_file($_FILES['foto']['tmp_name'], $targetPath)) {
@@ -30,7 +43,9 @@ switch ($action) {
                 exit;
             }
         } else {
-            $model->foto = null; // si no sube foto
+            // Imagen por defecto si no envían foto
+            $model->foto = 'utils/user_foto/default.jpg'; 
+            // Asegúrate de que default.jpg exista en esa carpeta
         }
 
         echo json_encode($model->registrar());
