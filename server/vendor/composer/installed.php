@@ -3,7 +3,7 @@
         'name' => 'mi-tienda/app',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '419de0e9e000d8fda5b3e2fc6320ba3445a14335',
+        'reference' => '1d84beb9a0b6c13d8916c13e4a51bfc120f66170',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -22,7 +22,7 @@
         'mi-tienda/app' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '419de0e9e000d8fda5b3e2fc6320ba3445a14335',
+            'reference' => '1d84beb9a0b6c13d8916c13e4a51bfc120f66170',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
