@@ -58,4 +58,5 @@ class Usuario {
         return false;
     }
 }
+//funciona ✔
 ?>

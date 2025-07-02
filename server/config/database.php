@@ -1,7 +1,5 @@
 <?php
 
-// conection = mysql -u root -h localhost -p
-
 class Database {
     private $host;
     private $username;
@@ -10,10 +8,11 @@ class Database {
     public $conn;
 
     public function __construct() {
-        $this->host = getenv('DB_HOST');
-        $this->username = getenv('DB_USERNAME');
-        $this->password = getenv('DB_PASSWORD');
-        $this->db_name = getenv('DB_NAME');
+        // Configuración local de XAMPP
+        $this->host = 'localhost';
+        $this->username = 'root';
+        $this->password = ''; // XAMPP por defecto no tiene contraseña
+        $this->db_name = 'tienda_jey'; // CAMBIAR esto al nombre real
     }
 
     public function conectar() {
@@ -27,37 +26,6 @@ class Database {
         return $this->conn;
     }
 }
+//funciona ✔
 
-
-
-
-
-
-
-
-
-
-
-
-// conection = mysql -u root -h localhost -p
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+?>

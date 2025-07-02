@@ -1,4 +1,5 @@
 <?php
+include_once __DIR__ . '/../config/cors.php';
 include_once __DIR__ . '/../config/database.php';
 include_once __DIR__ . '/../models/Usuario.php';
 
@@ -8,56 +9,64 @@ $db = new Database();
 $conn = $db->conectar();
 $model = new Usuario($conn);
 
-$data = $_POST;
+$data = json_decode(file_get_contents('php://input'), true);
+
 $action = $_GET['action'] ?? '';
 
 switch ($action) {
     case 'register':
-        foreach ($data as $key => $value) { 
-            $model->$key = $value; 
+    $data = $_POST;
+    if (empty($data)) {
+        $data = json_decode(file_get_contents("php://input"), true);
+    }
+
+    $camposRequeridos = ['nombre', 'apellido', 'dni', 'email', 'password'];
+    foreach ($camposRequeridos as $campo) {
+        if (empty($data[$campo])) {
+            echo json_encode(['success' => false, 'error' => "Falta el campo $campo"]);
+            exit;
         }
+    }
 
-        $uploadDir = __DIR__ . '/../utils/user_foto/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
+    $model->nombre = $data['nombre'];
+    $model->apellido = $data['apellido'];
+    $model->dni = $data['dni'];
+    $model->email = $data['email'];
+    $model->password = $data['password'];
+    $model->rol = $data['rol'] ?? 'cliente';
 
-        if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
-            // Detectar MIME real
-            $mime = mime_content_type($_FILES['foto']['tmp_name']);
-            // Forzar extensión .jpg para JPEG/JFIF
-            if (in_array($mime, ['image/jpeg', 'image/jpg', 'image/pjpeg', 'image/jfif'])) {
-                $ext = 'jpg';
-            } else {
-                $ext = pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
-                $ext = strtolower($ext);
-            }
+    $uploadDir = __DIR__ . '/../utils/user_foto/';
+    if (!is_dir($uploadDir)) mkdir($uploadDir, 0777, true);
 
-            $fileName = time() . '_' . bin2hex(random_bytes(5)) . '.' . $ext;
-            $targetPath = $uploadDir . $fileName;
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+        $mime = mime_content_type($_FILES['foto']['tmp_name']);
+        $ext = in_array($mime, ['image/jpeg', 'image/jpg', 'image/pjpeg', 'image/jfif']) ? 'jpg' : pathinfo($_FILES['foto']['name'], PATHINFO_EXTENSION);
+        $fileName = time() . '_' . bin2hex(random_bytes(5)) . '.' . strtolower($ext);
+        $targetPath = $uploadDir . $fileName;
 
-            if (move_uploaded_file($_FILES['foto']['tmp_name'], $targetPath)) {
-                $model->foto = 'utils/user_foto/' . $fileName;
-            } else {
-                echo json_encode(['success' => false, 'error' => 'Error al subir la foto']);
-                exit;
-            }
+        if (move_uploaded_file($_FILES['foto']['tmp_name'], $targetPath)) {
+            $model->foto = 'utils/user_foto/' . $fileName;
         } else {
-            // Imagen por defecto si no envían foto
-            $model->foto = 'utils/user_foto/default.jpg'; 
-            // Asegúrate de que default.jpg exista en esa carpeta
+            echo json_encode(['success' => false, 'error' => 'Error al subir la foto']);
+            exit;
         }
+    } else {
+        $model->foto = 'utils/user_foto/default.jpg';
+    }
 
-        echo json_encode($model->registrar());
-        break;
+    echo json_encode($model->registrar());
+    break;
+
 
     case 'login':
         $model->email = $data['email'] ?? '';
         $model->password = $data['password'] ?? '';
         $user = $model->login();
         if ($user) {
+            http_response_code(200);  // <- Agregar este código
             echo json_encode([
                 "success" => true,
+                "status" => 200, // <-- Esto lo agregás manualmente para verlo en el JSON
                 "user" => $user
             ]);
         } else {
@@ -76,4 +85,5 @@ switch ($action) {
         ]);
         break;
 }
+//funciona ✔
 ?>

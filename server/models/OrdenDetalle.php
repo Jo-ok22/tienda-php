@@ -37,4 +37,5 @@ class OrdenDetalle {
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 }
+//funciona ✔
 ?>

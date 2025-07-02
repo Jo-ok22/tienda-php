@@ -1,4 +1,5 @@
 <?php
+include_once __DIR__ . '/../config/cors.php';
 include_once __DIR__ . "/../config/database.php";
 include_once __DIR__ . "/../models/Orden.php";
 
@@ -58,6 +59,7 @@ switch ($action) {
         echo json_encode($model->obtenerPendiente());
         break;
 }
+//funciona ✔
 
 ?>
 

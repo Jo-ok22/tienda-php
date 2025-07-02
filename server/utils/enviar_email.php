@@ -34,4 +34,5 @@ function enviarFacturaPorEmail($emailCliente, $nombreCliente, $rutaPDF) {
         return "Error al enviar el email: {$mail->ErrorInfo}";
     }
 }
+//funciona ✔
 ?>

@@ -37,4 +37,5 @@ class Orden {
         return $result->fetch_assoc();
     }
 }
+//funciona ✔
 ?>

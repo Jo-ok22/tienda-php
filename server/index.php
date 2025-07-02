@@ -1,4 +1,12 @@
 <?php
+include_once __DIR__ . '/./config/cors.php';
+
+// Manejo de preflight (solicitud OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit;
+}
+
 header("Content-Type: application/json");
 
 $controller = $_GET['controller'] ?? '';
@@ -20,4 +28,5 @@ if (file_exists($controllerFile)) {
 } else {
     echo json_encode(["error" => "Controller no encontrado"]);
 }
+//funciona ✔
 ?>
