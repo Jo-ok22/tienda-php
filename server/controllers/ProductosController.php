@@ -58,7 +58,7 @@ switch ($action) {
         break;
 
     case 'updateDatos':
-    $data = $_POST;
+    $data = $_POST ?: json_decode(file_get_contents("php://input"), true);
 
     if (!isset($data['id']) || empty($data['id'])) {
         echo json_encode(['success' => false, 'error' => 'ID es requerido para actualizar']);
@@ -73,6 +73,7 @@ switch ($action) {
 
     echo json_encode($model->actualizar());
     break;
+
 
 case 'updateImagen':
     $data = $_POST;
@@ -121,5 +122,5 @@ case 'updateImagen':
         echo json_encode(['success' => false, 'error' => 'Acción no válida']);
         break;
 }
-//funciona ✔
+//funciona ✔✔
 ?>
